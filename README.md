@@ -3,7 +3,7 @@ VisualEdit or Visual Edit is a tool made for editing HUD files for both games Dr
 made in LuaRT Lua Framework v1.5.2 by Samir Tine (https://github.com/samyeyo)
 
 Visual Edit running on Windows:
-(https://github.com/BuilderDemo7/VisualEdit/blob/main/visualedit.png)
+https://github.com/BuilderDemo7/VisualEdit/blob/main/visualedit.png
 # First Releases
  Build 9375
 - Never released to public
