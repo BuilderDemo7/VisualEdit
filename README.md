@@ -6,13 +6,13 @@ made in LuaRT Lua Framework v1.5.2 by Samir Tine (https://github.com/samyeyo)
 - Never released to public
 - Driv3r HUD files only
 - Fixed bugs when saving
-- 
+
  Build 9545
 
 - Never released  to public
 - Driver: Parallel Lines HUD files support added
 - Fixed bugs when saving DPL HUD files
-- 
+
  Version 0.1B
 
 - First public beta released
