@@ -17,6 +17,7 @@ end
 local elementSizeBytes = 48
 local elementSizeBytesDPL = 112 -- bigger, isn't it?
 local supportedVersion = {37049,37053,61862}
+local WiiVerMagic = 18000
 local typeNames = {
   [1] = "Drawable",
   [2] = "Reserved (on car)",
@@ -50,7 +51,7 @@ function binaryHUDFile(buffer,ver)
     Height = string.unpack("f",string.sub(buffer,15+8,64)), --720,
 	  Elements = {}
    } 
-   print(string.format("Align: %d, Count: %d, Version: %d",align,count,HUD.Version))
+   print(string.format("Align: %d, Count: %d, Version: %d, Magic: %d",align,count,HUD.Version,HUD.Magic))
    local dpl = HUD.Version == 37053 or HUD.Version == 61862
    --local off = align
    --[[
@@ -109,7 +110,7 @@ function binaryHUDFile(buffer,ver)
   elseif HUD.Version == 37053 or HUD.Version == 61862 then
     --print("DRIVER POROLOLELLAINES")
     local fmt = elementFormatDPL
-    if HUD.Magic>=1800 then fmt = ">"..fmt end -- checks if it's Wii so we can make the order big-endian
+    if HUD.Magic>=WiiVerMagic then fmt = ">"..fmt else fmt = elementFormatDPL end -- checks if it's Wii so we can make the order big-endian
 	    r,g,b,a,x,y,w,h,input,unk1,sx,sy,unk2,unk3,id,flags,unk4,unk5,unk6,unk7,unk8,unk9,unk10,unk11,unk12,unk13,unk14,unk15 = string.unpack(fmt,string.sub(buffer,off,off+elementSizeBytesDPL+64))
 	  -- main
     elemtable.Type = 0 
@@ -168,7 +169,7 @@ function newBinaryHUDFile(HUD)
         bin = string.pack(elementFormat,elemtable.Type, elemtable.Align,elemtable.Unk2,elemtable.Unk3,elemtable.Input,elemtable.ID,elemtable.X,elemtable.Y,elemtable.Width,elemtable.Height,elemtable.SizeX,elemtable.SizeY,elemtable.R,elemtable.G,elemtable.B,elemtable.A)
        elseif HUD.Version == 37053 then
            local fmt = elementFormatDPL
-           if HUD.Magic>=1800 then fmt = ">"..fmt end -- checks if it's Wii so we can make the order big-endian          
+           if HUD.Magic>=WiiVerMagic then fmt = ">"..fmt end -- checks if it's Wii so we can make the order big-endian          
            local r,g,b,a,x,y,w,h,input,unk1,sx,sy,unk2,unk3,id,flags,unk4,unk5,unk6,unk7,unk8,unk9,unk10,unk11,unk12,unk13,unk14,unk15 = elemtable.R, elemtable.G,elemtable.B,elemtable.A,elemtable.X,elemtable.Y,elemtable.Width,elemtable.Height,elemtable.Input,elemtable.Unk1,elemtable.SizeX,elemtable.SizeY,elemtable.Unk2,elemtable.Unk3,elemtable.ID,elemtable.Flags,elemtable.Unk4,elemtable.Unk5,elemtable.Unk6,elemtable.Unk7,elemtable.Unk8,elemtable.Unk9,elemtable.Unk10,elemtable.Unk11,elemtable.Unk12,elemtable.Unk13,elemtable.Unk14,elemtable.Unk15
            print(sx,sy,w,h)
            print(id)
@@ -392,9 +393,9 @@ local HelpMenu = ui.Menu()
 win.menu:add("&Help").submenu = HelpMenu
 local aboutButton = HelpMenu:add("&About\tF1")
 local helpButton = HelpMenu:add("&How to Use")
-local build = "Version 0.1B Oct. 31" --"Build October 27 9485"
+local build = "Version 0.1BA Oct. 31" --"Build October 27 9485"
 function aboutButton:onClick()
-   ui.info("MADE IN BRAZIL\nMade with LuaRT Lua Framework v1.5.2\nAuthor: BuilderDemo7\nBeta Testers: NismoRacer00 & Sunrise_424\n\t"..build,"About")
+   ui.info("Made with LuaRT Lua Framework v1.5.2\nAuthor: BuilderDemo7\nBeta Testers: NismoRacer00 & Sunrise_424\n\t"..build,"About")
 end
 win:shortcut("f1", aboutButton.onClick)
 function helpButton:onClick()
